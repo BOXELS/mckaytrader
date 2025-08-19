@@ -1,0 +1,20 @@
+{
+  "name": "mckay-trader",
+  "version": "1.0.0",
+  "description": "Forex trading analytics and sizing calculator",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm start",
+    "backend": "cd backend && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+    "install-deps": "cd frontend && npm install && cd ../backend && pip install -r requirements.txt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BOXELS/mckaytrader.git"
+  },
+  "keywords": ["forex", "trading", "analytics", "react", "fastapi"],
+  "author": "BOXELS",
+  "license": "MIT"
+}

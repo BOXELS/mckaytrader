@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McKay Trader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #f9fafb;
+            color: #1f2937;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        nav {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #2563eb;
+        }
+        
+        main {
+            padding: 2rem 0;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .btn {
+            background: #2563eb;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .result {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+        
+        .success {
+            color: #059669;
+        }
+        
+        .danger {
+            color: #dc2626;
+        }
+        
+        #content {
+            min-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">McKay Trader</div>
+            <div class="nav-links">
+                <a href="#" onclick="showPage('dashboard')" class="active">Dashboard</a>
+                <a href="#" onclick="showPage('calculator')">Calculator</a>
+                <a href="#" onclick="showPage('trades')">Trade Log</a>
+                <a href="#" onclick="showPage('analytics')">Analytics</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div id="content">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+
+        // Simple router
+        let currentPage = 'dashboard';
+        
+        function showPage(page) {
+            currentPage = page;
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            switch(page) {
+                case 'dashboard':
+                    renderDashboard();
+                    break;
+                case 'calculator':
+                    renderCalculator();
+                    break;
+                case 'trades':
+                    renderTrades();
+                    break;
+                case 'analytics':
+                    renderAnalytics();
+                    break;
+            }
+        }
+
+        function renderDashboard() {
+            document.getElementById('content').innerHTML = `
+                <h1>Trading Dashboard</h1>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">127</div>
+                        <div class="stat-label">Total Trades</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value success">68.5%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value success">$2,847</div>
+                        <div class="stat-label">Total Profit</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Active Trades</div>
+                    </div>
+                </div>
+                
+                <div class="grid">
+                    <div class="card">
+                        <h2>Quick Actions</h2>
+                        <button class="btn" onclick="showPage('calculator')">Position Calculator</button>
+                    </div>
+                    <div class="card">
+                        <h2>Recent Trades</h2>
+                        <div>
+                            <strong>EUR/USD Long</strong> - <span class="success">+$45.20</span><br>
+                            <small>Tags: Reversal, Support</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCalculator() {
+            document.getElementById('content').innerHTML = `
+                <h1>Position Size Calculator</h1>
+                <div class="grid">
+                    <div class="card">
+                        <h2>Trade Parameters</h2>
+                        <form onsubmit="calculatePosition(event)">
+                            <select class="input" id="pair">
+                                <option value="EUR/USD">EUR/USD</option>
+                                <option value="GBP/USD">GBP/USD</option>
+                                <option value="USD/JPY">USD/JPY</option>
+                            </select>
+                            <input type="number" class="input" id="accountBalance" placeholder="Account Balance ($)" value="10000">
+                            <input type="number" class="input" id="riskPercentage" placeholder="Risk Percentage (%)" value="2" step="0.1">
+                            <input type="number" class="input" id="entryPrice" placeholder="Entry Price" value="1.0850" step="0.0001">
+                            <input type="number" class="input" id="stopLoss" placeholder="Stop Loss" value="1.0800" step="0.0001">
+                            <button type="submit" class="btn">Calculate Position Size</button>
+                        </form>
+                        <div id="calculatorResult"></div>
+                    </div>
+                    <div class="card">
+                        <h2>Risk Management Tips</h2>
+                        <ul style="padding-left: 1.5rem; line-height: 1.6;">
+                            <li>Never risk more than 2-3% of your account on a single trade</li>
+                            <li>Always set your stop loss before entering a trade</li>
+                            <li>Maintain a risk-to-reward ratio of at least 1:2</li>
+                            <li>Consider market volatility when setting position sizes</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTrades() {
+            document.getElementById('content').innerHTML = `
+                <h1>Trade Log</h1>
+                <div class="card">
+                    <h2>Add New Trade</h2>
+                    <form onsubmit="addTrade(event)">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <select class="input" id="tradePair">
+                                <option value="EUR/USD">EUR/USD</option>
+                                <option value="GBP/USD">GBP/USD</option>
+                            </select>
+                            <select class="input" id="direction">
+                                <option value="long">Long</option>
+                                <option value="short">Short</option>
+                            </select>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <input type="number" class="input" id="tradeEntryPrice" placeholder="Entry Price" step="0.0001">
+                            <input type="number" class="input" id="tradeExitPrice" placeholder="Exit Price (optional)" step="0.0001">
+                            <input type="number" class="input" id="tradeLotSize" placeholder="Lot Size" step="0.01">
+                        </div>
+                        <input type="text" class="input" id="tradeTags" placeholder="Tags (comma separated): reversal, h&s, breakout">
+                        <button type="submit" class="btn">Add Trade</button>
+                    </form>
+                    <div id="tradeResult"></div>
+                </div>
+                
+                <div class="card">
+                    <h2>Recent Trades</h2>
+                    <div id="tradesList">Loading trades...</div>
+                </div>
+            `;
+            loadTrades();
+        }
+
+        function renderAnalytics() {
+            document.getElementById('content').innerHTML = `
+                <h1>Trading Analytics</h1>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">68.5%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">1.85</div>
+                        <div class="stat-label">Profit Factor</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value success">$67.30</div>
+                        <div class="stat-label">Avg Win</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value danger">-$32.50</div>
+                        <div class="stat-label">Avg Loss</div>
+                    </div>
+                </div>
+                
+                <div class="grid">
+                    <div class="card">
+                        <h2>Win Rate by Pattern</h2>
+                        <div>
+                            <strong>Head & Shoulders:</strong> 75% (12/16)<br>
+                            <strong>Reversal:</strong> 68% (15/22)<br>
+                            <strong>Breakout:</strong> 53% (8/15)<br>
+                            <strong>Support:</strong> 75% (9/12)
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h2>Monthly Performance</h2>
+                        <div>Performance chart would go here</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function calculatePosition(event) {
+            event.preventDefault();
+            
+            const data = {
+                accountBalance: parseFloat(document.getElementById('accountBalance').value),
+                riskPercentage: parseFloat(document.getElementById('riskPercentage').value),
+                entryPrice: parseFloat(document.getElementById('entryPrice').value),
+                stopLoss: parseFloat(document.getElementById('stopLoss').value),
+                pair: document.getElementById('pair').value
+            };
+
+            try {
+                const response = await fetch(\`\${API_BASE}/calculator/position-size\`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const calc = result.data;
+                    document.getElementById('calculatorResult').innerHTML = \`
+                        <div class="result">
+                            <h3>Calculation Results</h3>
+                            <strong>Lot Size:</strong> \${calc.lot_size}<br>
+                            <strong>Risk Amount:</strong> $\${calc.risk_amount}<br>
+                            <strong>Position Value:</strong> $\${calc.position_value.toLocaleString()}<br>
+                            <strong>Pips at Risk:</strong> \${calc.pips_at_risk}
+                        </div>
+                    \`;
+                } else {
+                    document.getElementById('calculatorResult').innerHTML = \`
+                        <div class="result" style="background: #fee;">Error: \${result.error || 'Calculation failed'}</div>
+                    \`;
+                }
+            } catch (error) {
+                document.getElementById('calculatorResult').innerHTML = \`
+                    <div class="result" style="background: #fee;">Error: Could not connect to API</div>
+                \`;
+            }
+        }
+
+        async function addTrade(event) {
+            event.preventDefault();
+            
+            const data = {
+                pair: document.getElementById('tradePair').value,
+                direction: document.getElementById('direction').value,
+                entry_price: parseFloat(document.getElementById('tradeEntryPrice').value),
+                exit_price: document.getElementById('tradeExitPrice').value ? parseFloat(document.getElementById('tradeExitPrice').value) : null,
+                lot_size: parseFloat(document.getElementById('tradeLotSize').value),
+                tags: document.getElementById('tradeTags').value.split(',').map(tag => tag.trim()).filter(tag => tag)
+            };
+
+            try {
+                const response = await fetch(\`\${API_BASE}/trades/\`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('tradeResult').innerHTML = \`
+                        <div class="result" style="background: #eef;">Trade added successfully!</div>
+                    \`;
+                    document.querySelector('form').reset();
+                    setTimeout(() => loadTrades(), 500);
+                } else {
+                    document.getElementById('tradeResult').innerHTML = \`
+                        <div class="result" style="background: #fee;">Error: \${result.error || 'Failed to add trade'}</div>
+                    \`;
+                }
+            } catch (error) {
+                document.getElementById('tradeResult').innerHTML = \`
+                    <div class="result" style="background: #fee;">Error: Could not connect to API</div>
+                \`;
+            }
+        }
+
+        async function loadTrades() {
+            try {
+                const response = await fetch(\`\${API_BASE}/trades/\`);
+                const result = await response.json();
+                
+                if (result.success && result.data.trades.length > 0) {
+                    const tradesHtml = result.data.trades.map(trade => \`
+                        <div style="border-bottom: 1px solid #e5e7eb; padding: 1rem 0;">
+                            <strong>\${trade.pair} \${trade.direction.toUpperCase()}</strong>
+                            - Entry: \${trade.entry_price}
+                            \${trade.exit_price ? \` | Exit: \${trade.exit_price}\` : ''}
+                            \${trade.profit ? \` | P&L: <span class="\${trade.profit > 0 ? 'success' : 'danger'}">$\${trade.profit.toFixed(2)}</span>\` : ''}
+                            <br>
+                            <small>Tags: \${trade.tags.join(', ') || 'None'}</small>
+                        </div>
+                    \`).join('');
+                    
+                    document.getElementById('tradesList').innerHTML = tradesHtml;
+                } else {
+                    document.getElementById('tradesList').innerHTML = 'No trades found. Add your first trade above!';
+                }
+            } catch (error) {
+                document.getElementById('tradesList').innerHTML = 'Error loading trades. Make sure the API server is running.';
+            }
+        }
+
+        // Initialize dashboard on page load
+        renderDashboard();
+    </script>
+</body>
+</html>

@@ -140,7 +140,7 @@ The app includes demo data to showcase features:
 
 ### Support
 - Check `STRUCTURE.md` for detailed architecture
-- API documentation at http://localhost:8000/docs
+- API documentation at http://localhost:8127/docs
 - All code is well-commented and typed
 
 ## 🎉 You're Ready!

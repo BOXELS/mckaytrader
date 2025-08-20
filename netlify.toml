@@ -16,6 +16,6 @@
 # API proxy for development
 [[redirects]]
   from = "/api/*"
-  to = "http://localhost:8000/api/:splat"
+  to = "http://localhost:8127/api/:splat"
   status = 200
   force = false

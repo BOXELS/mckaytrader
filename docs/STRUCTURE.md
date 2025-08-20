@@ -96,9 +96,9 @@ npm run dev
 ```
 
 ### Access Points
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000  
-- **API Documentation**: http://localhost:8000/docs
+- **Frontend**: http://localhost:3127
+- **Backend API**: http://localhost:8127  
+- **API Documentation**: http://localhost:8127/docs
 
 ## 🔧 Key Features
 
@@ -178,7 +178,7 @@ npm run dev
 
 ### Frontend (.env)
 ```
-VITE_API_URL=http://localhost:8000/api
+VITE_API_URL=http://localhost:8127/api
 VITE_APP_NAME=McKay Trader
 ```
 
